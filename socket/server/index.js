@@ -7,6 +7,7 @@ const io = new Server(PORT);
 
 //endpoint state
 const state = io.of('/state');
+console.log('Server socket is up.');
 
 //server socket is listening for client connection
 state.on('connection', (socket) => {
@@ -14,6 +15,7 @@ state.on('connection', (socket) => {
 
   //listening for watering event from EC2 server.
   socket.on('startWater', (payload) => {
+    console.log('yo');
     //code for raspberry pi watering plants//
   });
 });
