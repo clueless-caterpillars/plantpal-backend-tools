@@ -18,7 +18,9 @@
   },
   "homepage": "https://github.com/clueless-caterpillars/plantpal-backend-tools#readme",
   "dependencies": {
+    "cors": "^2.8.5",
     "dotenv": "^16.1.4",
+    "express": "^4.18.2",
     "socket.io": "^4.6.2",
     "socket.io-client": "^4.6.2"
   }
