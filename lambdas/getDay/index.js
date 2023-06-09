@@ -1,5 +1,6 @@
 const dynamoose = require('dynamoose');
-const moment = require('moment');
+const moment = require('moment-timezone');
+
 const plantSchema = new dynamoose.Schema({
   "id": {
     "type": String,
@@ -31,8 +32,8 @@ exports.handler = async(event) => {
   let responseBody = null;
   if (params) {
     // responseBody = await plantModel.scan('timeStamp').contains(params['date']).exec();
-    let startday = moment(Number(params['date']));
-    let endday = moment(Number(params['date']));
+    let startday = moment.tz(Number(params['date']), "America/Los_Angeles");
+    let endday = moment.tz(Number(params['date']), "America/Los_Angeles");
     
     startday.hours(0,0,0,0);
     endday.hours(23, 59, 59, 999);
@@ -42,8 +43,8 @@ exports.handler = async(event) => {
 
     responseBody = await plantModel.scan('timeStamp').between(startdate, enddate).exec();
   } else {
-    let startdate = moment();
-    let prevdate = moment();
+    let startdate = moment.tz("America/Los_Angeles");
+    let prevdate = moment.tz("America/Los_Angeles");
     startdate.hours(23, 59, 59, 999);
     prevdate.date(prevdate.date() - 10);
     
@@ -53,7 +54,7 @@ exports.handler = async(event) => {
     let days = new Map();
     responseBody = await plantModel.scan('timeStamp').between(prevday, startday).exec();
     for (let i = 0; i < responseBody.length; i++) {
-      let log = moment(Number(responseBody[i].timeStamp));
+      let log = moment.tz(Number(responseBody[i].timeStamp), "America/Los_Angeles");
       let day = log.date();
       if (!days.has(day)) {
         days.set(day, log.valueOf());
